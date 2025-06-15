@@ -4,7 +4,7 @@ package ucd.bookstore.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name= "cartitem")
+@Table(name = "cartitem")
 public class CartItem {
     @Id
     @GeneratedValue

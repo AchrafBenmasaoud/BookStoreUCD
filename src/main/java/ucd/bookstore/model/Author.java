@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 @Entity
-@Table(name= "authors")
+@Table(name = "author")
 
 public class Author {
     @Id
@@ -27,7 +27,9 @@ public class Author {
         this.authorSurname = authorSurname;
         this.books = books;
     }
-    public Author() {}
+
+    public Author() {
+    }
 
     public Long getAuthor_id() {
         return author_id;

@@ -3,13 +3,12 @@ package ucd.bookstore.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.aspectj.bridge.ICommand;
 
 import java.util.List;
 
 
 @Entity
-@Table(name= "books")
+@Table(name = "book")
 public class Book {
 
     @Id
@@ -21,8 +20,8 @@ public class Book {
 
     @ManyToMany
     @JoinTable(
-            name = "authors",
-            joinColumns = @JoinColumn(name = "id"),
+            name = "book_by_author",
+            joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     private List<Author> authors;
 
