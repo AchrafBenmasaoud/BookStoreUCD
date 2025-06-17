@@ -16,7 +16,7 @@ public class AuthorController {
     @Autowired
     private AuthorRepository authorRepository;
 
-    // Get All Books
+    // Get All QAuthor
     @GetMapping
     public String listAuthors(Model model) {
         model.addAttribute("authors", authorRepository.findAll());
@@ -37,31 +37,11 @@ public class AuthorController {
       return "redirect:/author";
     }
 
-//    // Get a Single Book
-//    @GetMapping("/authors/{id}")
-//    public String getAuthorById(@PathVariable(value = "id") Long authorId, Model model) throws AuthorNotFoundException {
-//        Author author = authorRepository.findById(authorId).orElseThrow(() -> new AuthorNotFoundException(authorId));
-//        model.addAttribute("author", author);
-//        return "editAuthor";
-//
-//    }
-//
-//    // Update an Existing Book
-//    @PutMapping("/save_author")
-//    public String updateAuthor(@ModelAttribute("author") Author author, Model model)
-//            throws BookNotFoundException{
-//        authorRepository.save(author);
-//        return "redirect:/authors";
-//    }
-//
-//    // Delete a Book
-//    @DeleteMapping("/delete_author/{id}")
-//    public String deleteAuthor(@PathVariable(value = "id") Long authorId, Model model) throws AuthorNotFoundException {
-//        Author author = authorRepository.findById(authorId).orElseThrow(() -> new AuthorNotFoundException(authorId));
-//        authorRepository.delete(author);
-//        return "redirect:/authors";
-//    }
-
-
+    // OPTIONAL: Delete author
+    @GetMapping("/delete/{id}")
+    public String deleteAuthor(@PathVariable Long id) {
+        authorRepository.deleteById(id);
+        return "redirect:/author";
+    }
 
 }
