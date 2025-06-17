@@ -1,0 +1,27 @@
+<!-- src/main/resources/templates/author/author.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Authors</title>
+</head>
+<body>
+<h2>Authors</h2>
+<a href="/author/new">Add New Author</a>
+<table border="1">
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Actions</th>
+  </tr>
+  <tr th:each="author : ${authors}">
+    <td th:text="${author.getAuthor_id()}"></td>
+    <td th:text="${author.getAuthorName()}"></td>
+    <td th:text="${author.getAuthorSurname()}"></td>
+    <td>
+      <a th:href="@{'/author/edit/' + ${author.getAuthor_id()}}">Edit</a> |
+      <a th:href="@{'/author/delete/' + ${author.getAuthor_id()}}" onclick="return confirm('Are you sure?')">Delete</a>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
