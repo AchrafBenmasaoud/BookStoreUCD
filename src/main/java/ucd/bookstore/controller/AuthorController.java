@@ -29,7 +29,7 @@ public class AuthorController {
         return "add-author"; // templates/author/add-author.html
     }
 
-    // Create a new Book
+    // Create a new Author
     @PostMapping()
     public String newAuthor(@Validated @ModelAttribute("author") Author author)
     {

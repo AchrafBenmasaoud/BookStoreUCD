@@ -27,17 +27,20 @@ public class Book {
 
     @NotBlank
     private String year;
-    @NotBlank
+    @NotNull
     private double price;
     @NotNull
     private int copies;
+    @NotBlank
+    private String isbn;
 
-    public Book(String title, List<Author> authors, String year, double price, int copies) {
-        this.title = title;
-        this.authors = authors;
-        this.year = year;
-        this.price = price;
+    public Book(String isbn, int copies, double price, String year, List<Author> authors, String title) {
+        this.isbn = isbn;
         this.copies = copies;
+        this.price = price;
+        this.year = year;
+        this.authors = authors;
+        this.title = title;
     }
 
     public Book() {
@@ -89,6 +92,14 @@ public class Book {
 
     public void setCopies(int copies) {
         this.copies = copies;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 }
 
