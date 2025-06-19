@@ -26,11 +26,38 @@
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
-    <a class="navbar-brand" href="/">BookShop</a>
-    <div class="collapse navbar-collapse justify-content-end">
-        <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="/cart">Cart</a></li>
+    <a class="navbar-brand" href="/">BookStore</a>
+
+    <div class="collapse navbar-collapse">
+        <!-- Left-aligned links -->
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/author">Author</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/cart">Cart</a>
+            </li>
+        </ul>
+
+        <!-- Right-aligned welcome + logout or login/register -->
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item d-flex align-items-center me-3" th:if="${session.loggedInUser != null}">
+                <span class="navbar-text">
+                    Welcome, <span th:text="${session.loggedInUser.name}">User</span>
+                </span>
+            </li>
+            <li class="nav-item" th:if="${session.loggedInUser != null}">
+                <a class="nav-link text-danger" href="/auth/logout">Logout</a>
+            </li>
+            <li class="nav-item" th:if="${session.loggedInUser == null}">
+                <a class="nav-link" href="/auth/login">Login</a>
+            </li>
+            <li class="nav-item" th:if="${session.loggedInUser == null}">
+                <a class="nav-link" href="/auth/register">Register</a>
+            </li>
         </ul>
     </div>
 </nav>

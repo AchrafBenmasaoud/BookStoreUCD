@@ -26,11 +26,38 @@
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
-    <a class="navbar-brand" href="/">BookShop</a>
-    <div class="collapse navbar-collapse justify-content-end">
-        <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="/cart">Cart</a></li>
+    <a class="navbar-brand" href="/">BookStore</a>
+
+    <div class="collapse navbar-collapse">
+        <!-- Left-aligned links -->
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/author">Author</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/cart">Cart</a>
+            </li>
+        </ul>
+
+        <!-- Right-aligned welcome + logout or login/register -->
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item d-flex align-items-center me-3" th:if="${session.loggedInUser != null}">
+                <span class="navbar-text">
+                    Welcome, <span th:text="${session.loggedInUser.name}">User</span>
+                </span>
+            </li>
+            <li class="nav-item" th:if="${session.loggedInUser != null}">
+                <a class="nav-link text-danger" href="/auth/logout">Logout</a>
+            </li>
+            <li class="nav-item" th:if="${session.loggedInUser == null}">
+                <a class="nav-link" href="/auth/login">Login</a>
+            </li>
+            <li class="nav-item" th:if="${session.loggedInUser == null}">
+                <a class="nav-link" href="/auth/register">Register</a>
+            </li>
         </ul>
     </div>
 </nav>
@@ -40,16 +67,21 @@
 
     <form th:action="@{/book}" th:object="${book}" method="post">
 
+        <!-- Title -->
         <div class="mb-3">
             <label for="title" class="form-label">Title:</label>
             <input type="text" th:field="*{title}" class="form-control" id="title" required />
+            <div class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
         </div>
 
+        <!-- ISBN -->
         <div class="mb-3">
             <label for="isbn" class="form-label">ISBN:</label>
             <input type="text" th:field="*{isbn}" class="form-control" id="isbn" required />
+            <div class="text-danger" th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}"></div>
         </div>
 
+        <!-- Authors -->
         <div class="mb-3">
             <label for="authorSelect" class="form-label">Authors:</label>
             <select id="authorSelect" class="form-select" th:field="*{authors}" multiple required>
@@ -58,28 +90,35 @@
                         th:text="${a.getAuthorName() + ' ' + a.getAuthorSurname()}">
                 </option>
             </select>
+            <div class="text-danger" th:if="${#fields.hasErrors('authors')}" th:errors="*{authors}"></div>
         </div>
 
+        <!-- Year -->
         <div class="mb-3">
             <label for="year" class="form-label">Year:</label>
             <input type="number" th:field="*{year}" class="form-control" id="year" required />
+            <div class="text-danger" th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></div>
         </div>
 
+        <!-- Price -->
         <div class="mb-3">
             <label for="price" class="form-label">Price:</label>
             <input type="number" step="0.01" th:field="*{price}" class="form-control" id="price" required />
+            <div class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
         </div>
 
+        <!-- Copies -->
         <div class="mb-3">
             <label for="copies" class="form-label">Copies:</label>
             <input type="number" th:field="*{copies}" class="form-control" id="copies" required />
+            <div class="text-danger" th:if="${#fields.hasErrors('copies')}" th:errors="*{copies}"></div>
         </div>
 
+        <!-- Buttons -->
         <button type="submit" class="btn btn-primary">Save Book</button>
         <a href="/books" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
-
 </body>
 
 

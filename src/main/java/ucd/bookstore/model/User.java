@@ -1,10 +1,7 @@
 package ucd.bookstore.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
@@ -15,22 +12,28 @@ public class User {
 
     @Id
     @GeneratedValue
-    @NotBlank
     private Long id;
     @NotBlank
     private String name;
     @NotBlank
     private String surname;
     @NotBlank
+    @Email(message = "Please provide a valid email address")
     private String email;
     @NotBlank
+    @Size(min = 8, message = "Password must be at least 8 characters long")
     private String password;
     @NotBlank
+    @Pattern(regexp = "\\d{10,12}", message = "Phone number must be between 10 and 12 digits")
     private String phone;
+
     @NotBlank
     private String address;
-    @NotBlank
+    @NotNull
     private LocalDate dateOfBirth;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Cart cart;
 
     public User() {
     }
@@ -43,6 +46,7 @@ public class User {
         this.phone = phone;
         this.address = address;
         this.dateOfBirth = dateOfBirth;
+        this.cart = new Cart(this);
     }
 
     public Long getId() {
@@ -107,5 +111,16 @@ public class User {
 
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+        if (cart.getUser() != this){
+            cart.setUser(this);
+        }
     }
 }
