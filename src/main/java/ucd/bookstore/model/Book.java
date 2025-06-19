@@ -3,6 +3,7 @@ package ucd.bookstore.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 import java.util.List;
 
@@ -31,7 +32,8 @@ public class Book {
     private double price;
     @NotNull
     private int copies;
-    @NotBlank
+    @NotBlank(message = "ISBN cannot be blank")
+    @Pattern(regexp = "\\d{10,13}", message = "ISBN must contain only digits (10 to 13 digits)")
     private String isbn;
 
     public Book(String isbn, int copies, double price, String year, List<Author> authors, String title) {

@@ -3,6 +3,7 @@ package ucd.bookstore.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ucd.bookstore.exception.BookNotFoundException;
@@ -35,7 +36,11 @@ public class BookController {
 
     // Create a new Book
     @PostMapping()
-    public String newBook(@Validated @ModelAttribute("book") Book book) {
+    public String saveBook(@Validated @ModelAttribute("book") Book book, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("authors", authorRepository.findAll()); // if needed
+            return "add-book"; // or your actual form template
+        }
         bookRepository.save(book);
         return "redirect:/";
     }

@@ -17,8 +17,10 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
     <a class="navbar-brand" href="/">BookStore</a>
-    <div class="collapse navbar-collapse justify-content-end">
-        <ul class="navbar-nav">
+
+    <div class="collapse navbar-collapse">
+        <!-- Left-aligned links -->
+        <ul class="navbar-nav me-auto">
             <li class="nav-item">
                 <a class="nav-link" href="/">Home</a>
             </li>
@@ -29,44 +31,76 @@
                 <a class="nav-link" href="/cart">Cart</a>
             </li>
         </ul>
+
+        <!-- Right-aligned welcome + logout or login/register -->
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item d-flex align-items-center me-3" th:if="${session.loggedInUser != null}">
+                <span class="navbar-text">
+                    Welcome, <span th:text="${session.loggedInUser.name}">User</span>
+                </span>
+            </li>
+            <li class="nav-item" th:if="${session.loggedInUser != null}">
+                <a class="nav-link text-danger" href="/auth/logout">Logout</a>
+            </li>
+            <li class="nav-item" th:if="${session.loggedInUser == null}">
+                <a class="nav-link" href="/auth/login">Login</a>
+            </li>
+            <li class="nav-item" th:if="${session.loggedInUser == null}">
+                <a class="nav-link" href="/auth/register">Register</a>
+            </li>
+        </ul>
     </div>
 </nav>
 
 <!-- Search -->
 <div class="container mt-4">
-    <form class="d-flex mb-4" method="get" th:action="@{/}">
+    <form class="d-flex mb-4" method="get" th:action="@{/search}">
         <input class="form-control me-2" type="search" name="query" placeholder="Search..." aria-label="Search">
         <button class="btn btn-primary me-2" type="submit">Search</button>
         <a href="/book/new" class="btn btn-success">
             &#43; <!-- Plus sign -->
         </a>
     </form>
-
     <!-- Book Grid -->
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
         <div class="col" th:each="book : ${books}">
             <div class="card h-100 text-center">
-                <img src="https://via.placeholder.com/100" class="card-img-top mx-auto mt-3" style="width: 100px;"
-                     alt="Book">
+                <img src="https://via.placeholder.com/100" class="card-img-top mx-auto mt-3" style="width: 100px;" alt="Book">
                 <div class="card-body">
-                    <h5 class="card-title" th:text="${book.getTitle()}">Book Title</h5>
+                    <h5 class="card-title" th:text="${book.title}">Book Title</h5>
+
+                    <!-- Author names -->
                     <p class="card-text">
-                      <span th:each="author, stat : ${book.authors}">
-                          <span th:text="${author.authorName + ' ' + author.authorSurname}"></span>
-                          <span th:if="${!stat.last}">, </span>
-                      </span>
+                    <span th:each="author, stat : ${book.authors}">
+                        <span th:text="${author.authorName + ' ' + author.authorSurname}"></span>
+                        <span th:if="${!stat.last}">, </span>
+                    </span>
                     </p>
-                    <p class="card-text text-muted" th:text="${book.getIsbn()}">ISBN</p>
-                    <p class="card-text text-muted" th:text="'$' + ${book.getPrice()}">Price</p>
-                    <p class="card-text text-muted" th:text="${book.getCopies()}">Copies</p>
-                    <div class="action-btns mt-3">
-                        <a th:href="@{'/book/update/' + ${book.getId()}}" class="btn btn-warning btn-sm">Edit</a>
-                        <a th:href="@{'/book/delete/' + ${book.getId()}}" class="btn btn-danger btn-sm"
+
+                    <p class="card-text text-muted" th:text="${book.isbn}">ISBN</p>
+                    <p class="card-text text-muted" th:text="'€' + ${#numbers.formatDecimal(book.price, 1, 2)}">Price</p>
+                    <p class="card-text text-muted" th:text="'Copies: ' + ${book.copies}">Copies</p>
+
+                    <!-- Availability label -->
+                    <p th:if="${book.copies > 0}" class="text-success fw-bold">Available</p>
+                    <p th:if="${book.copies == 0}" class="text-danger fw-bold">Not available at the moment</p>
+
+                    <!-- Action buttons -->
+                    <div class="action-btns mt-3 d-flex justify-content-center gap-2 flex-wrap">
+                        <a th:href="@{'/book/update/' + ${book.id}}" class="btn btn-warning btn-sm">Edit</a>
+                        <a th:href="@{'/book/delete/' + ${book.id}}" class="btn btn-danger btn-sm"
                            onclick="return confirm('Are you sure you want to delete this book?');">Delete</a>
-                        <form th:action="@{/cart/add}" method="post">
-                            <input type="hidden" name="bookId" th:value="${book.getId()}">
-                            <button class="btn btn-primary" type="submit">Add to Cart</button>
+
+                        <!-- Add to cart button (only if available) -->
+                        <form th:action="@{/cart/add}" method="post" th:if="${book.copies > 0}">
+                            <input type="hidden" name="bookId" th:value="${book.id}">
+                            <button class="btn btn-primary btn-sm" type="submit">Add to Cart</button>
                         </form>
+
+                        <!-- Disabled button if not available -->
+                        <button class="btn btn-secondary btn-sm" disabled th:if="${book.copies == 0}">
+                            Out of Stock
+                        </button>
                     </div>
                 </div>
             </div>
