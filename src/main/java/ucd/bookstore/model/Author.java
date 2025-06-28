@@ -3,6 +3,7 @@ package ucd.bookstore.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,13 +20,12 @@ public class Author {
     @NotBlank
     private String authorSurname;
 
-    @ManyToMany
-    private List<Book> books;
+    @ManyToMany(mappedBy = "authors")
+    private List<Book> books = new ArrayList<>();
 
-    public Author(String authorName, String authorSurname, List<Book> books) {
+    public Author(String authorName, String authorSurname) {
         this.authorName = authorName;
         this.authorSurname = authorSurname;
-        this.books = books;
     }
 
     public Author() {

@@ -26,19 +26,20 @@ public class User {
     @NotBlank
     @Pattern(regexp = "\\d{10,12}", message = "Phone number must be between 10 and 12 digits")
     private String phone;
-
     @NotBlank
     private String address;
     @NotNull
     private LocalDate dateOfBirth;
-
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "VARCHAR(20)")
+    private UserRole role;
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Cart cart;
 
     public User() {
     }
 
-    public User(String name, String surname, String email, String password, String phone, String address, LocalDate dateOfBirth) {
+    public User(String name, String surname, String email, String password, String phone, String address, LocalDate dateOfBirth, UserRole role) {
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -46,6 +47,7 @@ public class User {
         this.phone = phone;
         this.address = address;
         this.dateOfBirth = dateOfBirth;
+        this.role = role;
         this.cart = new Cart(this);
     }
 
@@ -117,10 +119,21 @@ public class User {
         return cart;
     }
 
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
     public void setCart(Cart cart) {
         this.cart = cart;
         if (cart.getUser() != this){
             cart.setUser(this);
         }
+
     }
+
+
 }
