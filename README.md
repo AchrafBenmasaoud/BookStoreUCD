@@ -9,4 +9,3 @@ To connect to the database, you can either:
 See under "comments" in brightspace for credentials
 
 Added automatically loading test data!
-
